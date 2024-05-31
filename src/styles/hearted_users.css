@@ -1,0 +1,73 @@
+.user-list-container {
+    width: 300px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+  }
+  
+  h1 {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .user-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .user-emoji {
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  .user-info {
+    flex-grow: 1;
+  }
+  
+  .user-gender,
+  .user-name,
+  .user-message {
+    display: block;
+  }
+  
+  .user-gender {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .user-name {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .user-message {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .user-favorite {
+    font-size: 18px;
+  }
+  
