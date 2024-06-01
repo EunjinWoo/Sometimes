@@ -10,8 +10,8 @@ const Router = () => {
       <Routes>
       <Route index element={<MainPage />} />
       <Route path="/hearted" element={<HeartedUserListPage />} />
-      <Route path="/userdetail" element={<UserProfile />} />
-      <Route path="/chat" element={<ChatInterface />} />
+      <Route path="/userprofile/:userId" element={<UserProfile />} />
+      <Route path="/chat/:userId" element={<ChatInterface />} />
       </Routes>
     </BrowserRouter>
   );

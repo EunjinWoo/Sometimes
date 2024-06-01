@@ -10,6 +10,14 @@ const users = [
   { emoji: '😘', gender: '♂️', name: '꿀', message: '안녕하세용가리 . ^^', favorite: false },
   { emoji: '😴', gender: '♂️', name: '허니', message: '안녕하세용가리 . ^^', favorite: false },
   { emoji: '😔', gender: '♂️', name: '하니', message: '안녕하세용가리 . ^^', favorite: false },
+  { emoji: '😃', gender: '♂️', name: '요정', message: '안녕하세용가리 . ^^', favorite: false },
+  { emoji: '😎', gender: '♀️', name: '천사', message: '안녕하세용가리 . ^^', favorite: true },
+  { emoji: '😘', gender: '♂️', name: '요아정', message: '안녕하세용가리 . ^^', favorite: false },
+  { emoji: '😳', gender: '♀️', name: '그래놀라', message: '안녕하세용가리 . ^^', favorite: false },
+  { emoji: '😵', gender: '♀️', name: '자몽', message: '안녕하세용가리 . ^^', favorite: false },
+  { emoji: '😘', gender: '♂️', name: '꿀', message: '안녕하세용가리 . ^^', favorite: false },
+  { emoji: '😴', gender: '♂️', name: '허니', message: '안녕하세용가리 . ^^', favorite: false },
+  { emoji: '😔', gender: '♂️', name: '하니', message: '안녕하세용가리 . ^^', favorite: false },
 ];
 
 const HeartedUserListPage = () => {
@@ -28,9 +36,9 @@ const HeartedUserListPage = () => {
               <span className="user-name">{user.name}</span>
               <span className="user-message">{user.message}</span>
             </div>
-            <span className="user-favorite">
+            {/* <span className="user-favorite">
               {user.favorite ? '❤️' : '🤍'}
-            </span>
+            </span> */}
           </li>
         ))}
       </ul>
