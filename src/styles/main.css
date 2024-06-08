@@ -31,3 +31,90 @@
     height: 20px;
   }
   
+  .open-bottom-sheet {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  .bottom-sheet-content {
+    padding: 10px;
+  }
+  
+  .tab-header {
+    padding: 10px;
+    background-color: #f1f1f1;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .tab-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .tab-content {
+    padding: 10px;
+    max-height: 350px;
+    overflow-y: auto;
+  }
+  
+  .user-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .user-item:last-child {
+    border-bottom: none;
+  }
+  
+  .emoji {
+    font-size: 30px;
+    margin-right: 10px;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-name {
+    font-weight: bold;
+  }
+  
+  .user-status {
+    color: #777;
+    font-size: 14px;
+  }
+  
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .icon img {
+    width: 30px;
+    height: 30px;
+  }
+  
