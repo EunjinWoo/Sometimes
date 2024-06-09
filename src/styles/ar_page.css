@@ -1,0 +1,21 @@
+/* ARpage.css */
+.container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.backButton {
+    position: fixed;
+    top: 20px;
+    left: 30px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #e02ce0;
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Galmuri11', sans-serif;;
+}
+
