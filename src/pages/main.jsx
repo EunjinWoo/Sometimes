@@ -5,6 +5,7 @@ import homeIcon from "../images/icon_home.svg";
 import heartIcon from "../images/icon_heart.svg";
 import messageIcon from "../images/icon_chat.png";
 import userIcon from "../images/icon_profile.svg";
+import cameraIcon from "../images/icon_camera.svg";
 import { useNavigate } from "react-router-dom";
 import { Sheet } from "react-modal-sheet";
 import HeartedUserListPage from "./hearted_users";
@@ -124,6 +125,9 @@ const MainPage = () => {
         </div>
         <div className="icon" onClick={() => navigate(`/hearted`)}>
           <img src={messageIcon} alt="Message" />
+        </div>
+        <div className="icon" onClick={() => navigate(`/ARpage`)}>
+          <img src={cameraIcon} alt="Camera" />
         </div>
         <div className="icon" onClick={() => navigate(`/userprofile/0`)}>
           <img src={userIcon} alt="User" />
