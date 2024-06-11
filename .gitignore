@@ -169,7 +169,6 @@ sketch
 
 # secrete keys
 .env
-public/index.html
 
 # End of https://www.toptal.com/developers/gitignore/api/react,amplify,macos,visualstudiocode
 
