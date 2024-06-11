@@ -4,6 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// 환경변수에서 API 키 가져오기
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
+// Google Maps API 스크립트 동적으로 추가
+const script = document.createElement('script');
+script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+script.async = true;
+document.head.appendChild(script);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
