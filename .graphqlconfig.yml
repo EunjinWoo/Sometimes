@@ -1,5 +1,5 @@
 projects:
-  sometimes:
+  sometimes-dev:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
@@ -10,6 +10,9 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
+        region: ap-northeast-2
+        apiId: lofy32v35rcs3foulr22fovswu
+        maxDepth: 2
 extensions:
   amplify:
     version: 3
