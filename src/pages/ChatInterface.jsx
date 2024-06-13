@@ -29,7 +29,7 @@ const ChatInterface = () => {
         요아정과의 대화
       </div>
       <div className="chat-body">
-        <div className="pagination-info">Pagination : 50개씩</div>
+        <div className="pagination-info"></div>
         {messages.map(msg => (
           <ChatMessage key={msg.id} message={msg} />
         ))}

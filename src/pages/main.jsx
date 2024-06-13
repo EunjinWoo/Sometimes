@@ -123,7 +123,7 @@ const MainPage = () => {
         <div className="icon" onClick={() => navigate(`/hearted`)}>
           <img src={heartIcon} alt="Heart" />
         </div>
-        <div className="icon" onClick={() => navigate(`/hearted`)}>
+        <div className="icon" onClick={() => navigate(`/chat/1`)}>
           <img src={messageIcon} alt="Message" />
         </div>
         <div className="icon" onClick={() => navigate(`/ARpage`)}>
