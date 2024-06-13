@@ -13,9 +13,9 @@ const ARpage = () => {
         <div className="container">
             <a-scene vr-mode-ui="enabled: false" embedded
                      arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
-                <a-entity gltf-model="../images/magnemite/scene.gltf"
+                <a-entity gltf-model="../images/heart_imoji2.glb"
                           rotation="0 180 0" scale="0.15 0.15 0.15"
-                          gps-entity-place="longitude: 37.2398; latitude: 127.0833;" animation-mixer/>
+                          gps-entity-place="longitude: 37.2395755; latitude: 127.0836505;" animation-mixer/>
                 <a-camera gps-camera rotation-reader> </a-camera>
             </a-scene>
             <button
