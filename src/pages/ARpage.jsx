@@ -11,17 +11,13 @@ const ARpage = () => {
 
     return (
         <div className="container">
-            <a-scene embedded arjs='sourceType: webcam;'>
-                <a-marker preset="hiro">
-                    <a-image
-                        src="/images/heart_image.png"
-                        position="0 0 0"
-                        rotation="-90 0 0"
-                        height="1"
-                        width="1">
-                    </a-image>
-                </a-marker>
-                <a-entity camera></a-entity>
+            <a-scene vr-mode-ui="enabled: false" embeded
+                     arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
+                <a-entity gltf-model="../images/magnemite/scene.gltf"
+                          rotation="0 180 0" scale="0.15 0.15 0.15"
+                          look-at="[gps-camera]"
+                          gps-entity-place="longitude: 37.2406; latitude: 127.0729;" animation-mixer/>
+                <a-camera gps-camera rotation-reader> </a-camera>
             </a-scene>
             <button
                 onClick={handleBackToMainPage}
@@ -33,3 +29,4 @@ const ARpage = () => {
 };
 
 export default ARpage;
+
