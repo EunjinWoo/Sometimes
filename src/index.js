@@ -9,7 +9,7 @@ const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 // Google Maps API 스크립트 동적으로 추가
 const script = document.createElement('script');
-script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAt3flv6KDTEl-0SVme6lpT8D_gW_AhsX0&callback=initMap`;
 script.async = true;
 document.head.appendChild(script);
 
