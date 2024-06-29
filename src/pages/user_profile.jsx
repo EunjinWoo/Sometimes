@@ -38,11 +38,11 @@ const UserProfile = () => {
       <div className="profile-content">
         <div className="emoji">😘</div>
         <div className="greeting">안녕하세요. ^^</div>
-        <div className="steps">
+        {/* <div className="steps">
           <button>Step 1</button>
           <button>Step 2</button>
           <button>Step 3</button>
-        </div>
+        </div> */}
         <div className="profile-details">
           <div className="profile-pic">
             <img src={profileData.profilePic} alt="Profile" />
