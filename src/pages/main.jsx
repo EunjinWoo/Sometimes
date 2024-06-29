@@ -101,21 +101,6 @@ const MainPage = () => {
 
   const clickEvent = async () => {
     try {
-      /*
-      // 현재 위치로 내 위치 업데이트
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        console.log("locRes ----> : ", userId, latitude, longitude);
-      
-        const locRes = await updateUserLocation(userId, latitude, longitude);
-
-        console.log('GraphQL response - updateUserLocation:', locRes);
-      }, (error) => {
-        console.error('Error getting location:', error);
-      });
-      */
-
       const userDetails = await fetchUserDetails();
       setUserDetails(userDetails);
       console.log('User Details:', userDetails);
@@ -178,23 +163,24 @@ const MainPage = () => {
     });
 
     userLocations.forEach((location) => {
-      // console.log(location);
       const user = userDetails.find(user => user.id === location.userId);
       if (user) {
-        console.log("user:", location.x, location.y);
-        new window.google.maps.Marker({
+        const marker = new window.google.maps.Marker({
           position: { lat: location.x, lng: location.y },
           map: map,
           title: user.username,
           icon: {
-            // url: user.emojipath,
             url: charCloud,
             scaledSize: new window.google.maps.Size(50, 50),
           },
         });
+        
+        marker.addListener('click', () => {
+          navigate(`/userprofile/${user.id}`);
+        });
       }
     });
-  }, [mapRef, userDetails, userLocations]);
+  }, [mapRef, userDetails, userLocations, navigate]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -244,7 +230,7 @@ const MainPage = () => {
         <div className="icon" onClick={() => navigate(`/hearted`)}>
           <img src={heartIcon} alt="Heart" />
         </div>
-        <div className="icon" onClick={() => navigate(`/chat/1`)}>
+        <div className="icon" onClick={() => navigate(`/chat/1`, { state: { userId, username } })}>
           <img src={messageIcon} alt="Message" />
         </div>
         <div className="icon" onClick={() => navigate(`/ARpage`)}>

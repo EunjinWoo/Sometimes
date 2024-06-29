@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import ChatMessage from './ChatMessage';
 import "../styles/chat_interface.css";
+import { useLocation } from 'react-router-dom';
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([
     { id: 1, text: '안녕하세요 ㅎㅎ', timestamp: '02:26', sender: 'user' },
     { id: 2, text: '안녕하세요 ~', timestamp: '02:26', sender: 'other' }
   ]);
+  const location = useLocation();
+  const { userId, username } = location.state || {};
+
+  console.log(userId, username);
   
   const [newMessage, setNewMessage] = useState('');
 
