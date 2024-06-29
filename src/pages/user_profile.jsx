@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/user_profile.css';
+import profilePic from '../images/boo.png';
 
 const UserProfile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -9,7 +10,7 @@ const UserProfile = () => {
     // 예시로 static 데이터 사용
     const fetchProfileData = async () => {
       const data = {
-        profilePic: 'profile-pic-url', // 실제 이미지 URL로 대체
+        profilePic: profilePic, // 실제 이미지 URL로 대체
         age: 27,
         mbti: 'ENFP',
         idealType: '원더걸스',

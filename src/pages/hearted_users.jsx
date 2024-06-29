@@ -24,8 +24,8 @@ const HeartedUserListPage = () => {
   return (
     <div className="user-list-container">
       <header>
-        <h1>지도 상 유저</h1>
-        <button>This week</button>
+        <h1>찜한 유저</h1>
+        {/* <button>This week</button> */}
       </header>
       <ul>
         {users.map((user, index) => (
