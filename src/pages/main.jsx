@@ -11,6 +11,7 @@ import HeartedUserListPage from "./hearted_users";
 import { useLocation } from 'react-router-dom';
 
 import charCloud from "../images/character_cloud.svg";
+import redMarker from "../images/red_marker.png";  // Ensure you have this red marker icon in your images folder
 
 import { generateClient } from 'aws-amplify/api';
 import { updateLocation } from '../graphql/mutations';
@@ -153,12 +154,6 @@ const MainPage = () => {
       styles: mapStyle
     });
 
-    new window.google.maps.Marker({
-      position: { lat: latitude, lng: longitude },
-      map: map,
-      title: "현재 위치",
-    });
-
     new window.google.maps.Circle({
       map: map,
       center: { lat: latitude, lng: longitude },
@@ -172,7 +167,8 @@ const MainPage = () => {
 
     userLocations.forEach((location) => {
       const user = userDetails.find(user => user.id === location.userId);
-      if (user) {
+      if (user && user.id != userId) {
+        console.log("loooop: ", user.id)
         const marker = new window.google.maps.Marker({
           position: { lat: location.x, lng: location.y },
           map: map,
@@ -187,6 +183,17 @@ const MainPage = () => {
           navigate(`/userprofile/${user.id}`);
         });
       }
+    });
+
+    // 현재 위치 표시
+    new window.google.maps.Marker({
+      position: { lat: latitude, lng: longitude },
+      map: map,
+      title: "현재 위치",
+      icon: {
+        url: redMarker,
+        scaledSize: new window.google.maps.Size(50, 50),
+      },
     });
   };
 
