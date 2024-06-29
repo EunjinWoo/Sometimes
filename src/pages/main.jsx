@@ -99,7 +99,7 @@ const MainPage = () => {
     }
   };
 
-  const clickEvent = async () => {
+  const initializeData = async () => {
     try {
       const userDetails = await fetchUserDetails();
       setUserDetails(userDetails);
@@ -109,16 +109,24 @@ const MainPage = () => {
       setUserLocations(userLocations);
       console.log('User Locations:', userLocations);
 
+      return { userDetails, userLocations };
+    } catch (error) {
+      console.error('Error initializing data:', error);
+    }
+  };
+
+  const clickEvent = async () => {
+    try {
+      const { userDetails, userLocations } = await initializeData();
+      
       const subscribeCreate = subscribeToLocationCreates(userId);
       const subscribeUpdate = subscribeToLocationUpdates(userId);
 
       subscribeCreate.next = (locationData) => {
         console.log('New location:', locationData);
-        console.log('User Details:', userDetails);
       };
       subscribeUpdate.next = (locationData) => {
-        console.log('New location:', locationData);
-        console.log('User Details:', userDetails);
+        console.log('Updated location:', locationData);
       };
 
     } catch (error) {
@@ -126,7 +134,7 @@ const MainPage = () => {
     }
   };
 
-  const initMap = useCallback((position) => {
+  const initMap = (position, userDetails, userLocations) => {
     const { latitude, longitude } = position.coords;
 
     const mapStyle = [
@@ -180,23 +188,36 @@ const MainPage = () => {
         });
       }
     });
-  }, [mapRef, userDetails, userLocations, navigate]);
+  };
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(initMap, (error) => {
-        console.error("위치 정보를 가져오는데 실패했습니다.", error);
-        initMap({
-          coords: { latitude: -34.397, longitude: 150.644 }
-        });
-      });
-    } else {
-      console.error("이 브라우저는 지오로케이션을 지원하지 않습니다.");
-      initMap({
-        coords: { latitude: -34.397, longitude: 150.644 }
-      });
-    }
-  }, [initMap]);
+    const fetchDataAndInitMap = async () => {
+      const { userDetails, userLocations } = await initializeData();
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => initMap(position, userDetails, userLocations),
+          (error) => {
+            console.error("위치 정보를 가져오는데 실패했습니다.", error);
+            initMap(
+              { coords: { latitude: -34.397, longitude: 150.644 } },
+              userDetails,
+              userLocations
+            );
+          }
+        );
+      } else {
+        console.error("이 브라우저는 지오로케이션을 지원하지 않습니다.");
+        initMap(
+          { coords: { latitude: -34.397, longitude: 150.644 } },
+          userDetails,
+          userLocations
+        );
+      }
+    };
+
+    fetchDataAndInitMap();
+  }, []);
 
   return (
     <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
