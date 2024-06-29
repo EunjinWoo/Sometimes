@@ -9,11 +9,71 @@ import cameraIcon from "../images/icon_camera.svg";
 import { useNavigate } from "react-router-dom";
 import { Sheet } from "react-modal-sheet";
 import HeartedUserListPage from "./hearted_users";
+import { useLocation } from 'react-router-dom';
+
+import { generateClient } from 'aws-amplify/api';
+import { createLocation } from '../graphql/mutations';
+import { onCreateLocation } from '../graphql/subscriptions';
+
+
+
+const client = generateClient();
 
 const MainPage = () => {
   const mapRef = useRef(null);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const { userId } = location.state || {};
+
+  console.log('userId: ', userId);
+
+
+//------------------------------------------------------------------------------------------------------
+    // 위치 정보 저장 함수
+    const saveUserLocation = async (userId, x, y) => {
+      try {
+        await client.graphql({
+          query: createLocation,
+          variables: {
+            input: {
+              userId,
+              x,
+              y
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error saving location:', error);
+      }
+    };
+  
+    // 실시간 위치 업데이트 구독 함수
+    const subscribeToLocationUpdates = (userId) => {
+      const subscription = client.graphql({
+        query: onCreateLocation,
+        variables: { userId }
+      }).subscribe({
+        next: (locationData) => {
+          console.log('New location:', locationData);
+        }
+      });
+  
+      return subscription;
+    };
+  
+
+
+
+
+    const clickEvent =() => {
+      // console.log('야');
+      saveUserLocation(userId, 37.7749, -122.4194);
+      const subscription = subscribeToLocationUpdates(userId);
+    }
+
+
+//------------------------------------------------------------------------------------------------------
 
   const initMap = useCallback((position) => {
     const { latitude, longitude } = position.coords;
@@ -100,9 +160,14 @@ const MainPage = () => {
     <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
       <div className="map" ref={mapRef} style={{ height: '100%', width: '100%' }}></div>
 
-      <button className="open-bottom-sheet" onClick={() => setOpen(true)}>
-        Open List
-      </button>
+      <div style={{ display: 'flex', gap: '10px' }}>
+    <button className="open-bottom-sheet" onClick={() => setOpen(true)}>
+      Open List
+    </button>
+    <button className="close-bottom-sheet" onClick={() => clickEvent()}>
+      Close List
+    </button>
+  </div>
 
       <Sheet isOpen={open} onClose={() => setOpen(false)}>
         <Sheet.Container>

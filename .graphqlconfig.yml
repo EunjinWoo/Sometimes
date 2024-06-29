@@ -1,6 +1,6 @@
 projects:
-  sometimes-dev:
-    schemaPath: src/graphql/schema.json
+  Codegen Project:
+    schemaPath: schema.json
     includes:
       - src/graphql/**/*.js
     excludes:
@@ -12,7 +12,6 @@ projects:
         docsFilePath: src/graphql
         region: ap-northeast-2
         apiId: lofy32v35rcs3foulr22fovswu
+        frontend: javascript
+        framework: react
         maxDepth: 2
-extensions:
-  amplify:
-    version: 3

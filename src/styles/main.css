@@ -31,7 +31,7 @@
     height: 20px;
   }
   
-  .open-bottom-sheet {
+  /* .open-bottom-sheet {
     position: absolute;
     bottom: 70px;
     left: 50%;
@@ -44,6 +44,22 @@
     border-radius: 5px;
     cursor: pointer;
     z-index: 1000;
+  } */
+
+  .open-bottom-sheet, .close-bottom-sheet {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .open-bottom-sheet:hover, .close-bottom-sheet:hover {
+    background-color: #0056b3;
   }
   
   .bottom-sheet-content {
