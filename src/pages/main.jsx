@@ -38,6 +38,9 @@ const MainPage = () => {
   const [userDetails, setUserDetails] = useState([]);
   const [userLocations, setUserLocations] = useState([]);
 
+  console.log('MainPage userId: ', userId);
+  console.log('MainPage username: ', username);
+
   const updateUserLocation = async (userId, x, y) => {
     try {
       const res = await client.graphql({
@@ -219,10 +222,9 @@ const MainPage = () => {
             scaledSize: new window.google.maps.Size(50, 50),
           },
         });
-        
-        var anyUserId = user.id;
+      
         marker.addListener('click', () => {
-          navigate(`/userprofile/${user.id}`, { state: { anyUserId } });
+          navigate(`/userprofile/${user.id}`, { state: { userId: user.id } });
         });
       }
     });
@@ -306,7 +308,7 @@ const MainPage = () => {
         <div className="icon" onClick={() => navigate(`/ARpage`)}>
           <img src={cameraIcon} alt="Camera" />
         </div>
-        <div className="icon" onClick={() => navigate(`/userprofile/0`)}>
+        <div className="icon" onClick={() => navigate(`/userprofile/${userId}`, { state: { userId: userId } })}>
           <img src={userIcon} alt="User" />
         </div>
       </div>
