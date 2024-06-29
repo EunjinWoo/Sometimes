@@ -11,6 +11,14 @@ import HeartedUserListPage from "./hearted_users";
 import { useLocation } from 'react-router-dom';
 
 import charCloud from "../images/character_cloud.svg";
+import emoji1 from "../images/emojis/1.svg";
+import emoji2 from "../images/emojis/2.svg";
+import emoji3 from "../images/emojis/3.svg";
+import emoji4 from "../images/emojis/4.svg";
+import emoji5 from "../images/emojis/5.svg";
+import emoji6 from "../images/emojis/6.svg";
+import emoji7 from "../images/emojis/7.svg";
+import emoji8 from "../images/emojis/8.svg";
 import redMarker from "../images/red_marker.png";  // Ensure you have this red marker icon in your images folder
 
 import { generateClient } from 'aws-amplify/api';
@@ -35,7 +43,6 @@ const MainPage = () => {
 
   const updateUserLocation = async (userId, x, y) => {
     try {
-      console.log("updateUserLocation -> ", userId, x, y);
       const res = await client.graphql({
         query: updateLocation,
         variables: {
@@ -130,6 +137,27 @@ const MainPage = () => {
         console.log('Updated location:', locationData);
       };
 
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => initMap(position, userDetails, userLocations),
+          (error) => {
+            console.error("위치 정보를 가져오는데 실패했습니다.", error);
+            initMap(
+              { coords: { latitude: -34.397, longitude: 150.644 } },
+              userDetails,
+              userLocations
+            );
+          }
+        );
+      } else {
+        console.error("이 브라우저는 지오로케이션을 지원하지 않습니다.");
+        initMap(
+          { coords: { latitude: -34.397, longitude: 150.644 } },
+          userDetails,
+          userLocations
+        );
+      }
+
     } catch (error) {
       console.error('Error in clickEvent:', error);
     }
@@ -165,16 +193,32 @@ const MainPage = () => {
       strokeWeight: 5,
     });
 
+    // 아이콘을 매핑하는 함수
+    const getIconUrl = (iconNum) => {
+      const icons = {
+        1 : emoji1,
+        2 : emoji2,
+        3 : emoji3,
+        4 : emoji4,
+        5 : emoji5,
+        6 : emoji6,
+        7 : emoji7,
+        8 : emoji8,
+        // 추가적인 아이콘이 있다면 여기에 추가
+      };
+
+      return icons[iconNum] || charCloud; // 기본값으로 charCloud 설정
+    };
+
     userLocations.forEach((location) => {
       const user = userDetails.find(user => user.id === location.userId);
-      if (user && user.id != userId) {
-        console.log("loooop: ", user.id)
+      if (user && user.id !== userId) {
         const marker = new window.google.maps.Marker({
           position: { lat: location.x, lng: location.y },
           map: map,
           title: user.username,
           icon: {
-            url: charCloud,
+            url: getIconUrl(user.emojiPath),
             scaledSize: new window.google.maps.Size(50, 50),
           },
         });
