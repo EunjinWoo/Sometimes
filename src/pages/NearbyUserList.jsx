@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "../styles/hearted_users.css";
+import "../styles/NearbyUserList.css";
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { generateClient } from 'aws-amplify/api';
@@ -34,10 +34,9 @@ const getIconUrl = (iconNum) => {
   return icons[iconNum] || charCloud; // 기본값으로 charCloud 설정
 };
 
-const HeartedUserListPage = () => {
+const NearbyUserList = ({ userId, username }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { userId, username } = location.state || {};
 
   const [userDetails, setUserDetails] = useState([]);
   const [userLocations, setUserLocations] = useState([]);
@@ -86,22 +85,24 @@ const HeartedUserListPage = () => {
   return (
     <div className="user-list-container">
       <header>
-        <h1>찜한 유저</h1>
+        <h1>USER LIST</h1>
       </header>
       <ul>
-        {nearbyUsers.map((user, index) => (
-          <li key={index} className="user-item">
-            <img className="user-emoji" src={getIconUrl(user.emojiPath)}></img>
-            <div className="user-info">
-              <span className="user-gender">{user.gender}</span>
-              <span className="user-name">{user.name}</span>
-              <span className="user-message">{user.message}</span>
-            </div>
-          </li>
-        ))}
+        {nearbyUsers.map((user, index) => {
+            console.log("nearbyUsers : ",nearbyUsers);
+            return (
+            <li key={index} className="user-item" onClick={() => navigate(`/userprofile/${user.id}`, {state: {otherUserId: user.id, userId: userId}})}>
+                <img className="user-emoji" src={getIconUrl(user.emojiPath)}></img>
+                <div className="user-info">
+                    <span className="user-gender">{user.gender}</span>
+                    <span className="user-name">{user.name}</span>
+                    <span className="user-message">{user.message}</span>
+                </div>
+            </li>
+        )})}
       </ul>
     </div>
   );
 };
 
-export default HeartedUserListPage;
+export default NearbyUserList;

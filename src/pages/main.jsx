@@ -25,6 +25,7 @@ import { generateClient } from 'aws-amplify/api';
 import { updateLocation } from '../graphql/mutations';
 import { listLocations, listUsers } from '../graphql/queries';
 import { onCreateLocation, onUpdateLocation } from '../graphql/subscriptions';
+import NearbyUserList from "./NearbyUserList";
 
 const client = generateClient();
 
@@ -211,20 +212,20 @@ const MainPage = () => {
     };
 
     userLocations.forEach((location) => {
-      const user = userDetails.find(user => user.id === location.userId);
-      if (user && user.id !== userId) {
+      const otherUser = userDetails.find(user => user.id === location.userId);
+      if (otherUser && otherUser.id !== userId) {
         const marker = new window.google.maps.Marker({
           position: { lat: location.x, lng: location.y },
           map: map,
-          title: user.username,
+          title: otherUser.username,
           icon: {
-            url: getIconUrl(user.emojiPath),
+            url: getIconUrl(otherUser.emojiPath),
             scaledSize: new window.google.maps.Size(50, 50),
           },
         });
       
         marker.addListener('click', () => {
-          navigate(`/userprofile/${user.id}`, { state: { userId: user.id } });
+          navigate(`/userprofile/${otherUser.id}`, { state: { otherUserId: otherUser.id,userId:userId } });
         });
       }
     });
@@ -288,7 +289,7 @@ const MainPage = () => {
           <Sheet.Header />
           <Sheet.Content>
             <div className="bottom-sheet-content">
-              <HeartedUserListPage />
+              <NearbyUserList userId={userId} username={username} />
             </div>
           </Sheet.Content>
         </Sheet.Container>
@@ -299,7 +300,7 @@ const MainPage = () => {
         <div className="icon">
           <img src={homeIcon} alt="Home" />
         </div>
-        <div className="icon" onClick={() => navigate(`/hearted`)}>
+        <div className="icon" onClick={() => navigate(`/hearted`, { state: { userId, username } })}>
           <img src={heartIcon} alt="Heart" />
         </div>
         <div className="icon" onClick={() => navigate(`/chat`, { state: { userId, username } })}>
@@ -308,7 +309,7 @@ const MainPage = () => {
         <div className="icon" onClick={() => navigate(`/ARpage`)}>
           <img src={cameraIcon} alt="Camera" />
         </div>
-        <div className="icon" onClick={() => navigate(`/userprofile/${userId}`, { state: { userId: userId } })}>
+        <div className="icon" onClick={() => navigate(`/userprofile/${userId}`, { state: { otherUserId: 0 , userId: userId } })}>
           <img src={userIcon} alt="User" />
         </div>
       </div>
