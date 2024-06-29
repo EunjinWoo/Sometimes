@@ -3,7 +3,7 @@ import "../styles/hearted_users.css";
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { generateClient } from 'aws-amplify/api';
-import { listLocations, listUsers } from '../graphql/queries';
+import { listLikes, listUsers } from '../graphql/queries';
 
 import charCloud from "../images/character_cloud.svg";
 import emoji1 from "../images/emojis/1.svg";
@@ -40,8 +40,7 @@ const HeartedUserListPage = () => {
   const { userId, username } = location.state || {};
 
   const [userDetails, setUserDetails] = useState([]);
-  const [userLocations, setUserLocations] = useState([]);
-  const [nearbyUsers, setNearbyUsers] = useState([]);
+  const [likedUsers, setLikedUsers] = useState([]);
 
   const fetchUserDetails = async () => {
     try {
@@ -54,34 +53,30 @@ const HeartedUserListPage = () => {
     }
   };
 
-  const fetchUserLocations = async () => {
+  const fetchLikedUsers = async () => {
     try {
-      const userLocation = await client.graphql({
-        query: listLocations,
+      const likeData = await client.graphql({
+        query: listLikes,
+        variables: {
+          filter: {
+            likeUserId: { eq: userId }
+          }
+        }
       });
-      setUserLocations(userLocation.data.listLocations.items);
+
+      const likedUserIds = likeData.data.listLikes.items.map(like => like.likedUserId);
+      setLikedUsers(likedUserIds);
     } catch (error) {
-      console.error('Error fetching user locations:', error);
+      console.error('Error fetching liked users:', error);
     }
   };
 
   useEffect(() => {
     fetchUserDetails();
-    fetchUserLocations();
+    fetchLikedUsers();
   }, []);
 
-  useEffect(() => {
-    if (userDetails.length > 0 && userLocations.length > 0) {
-      const nearby = userLocations.map((location) => {
-        const user = userDetails.find(user => location.userId === user.id);
-        return user;
-      }).filter(user => user !== undefined && user.id !== userId);
-
-      setNearbyUsers(nearby);
-
-      console.log(nearbyUsers);
-    }
-  }, [userDetails, userLocations, userId]);
+  const likedUserDetails = userDetails.filter(user => likedUsers.includes(user.id));
 
   return (
     <div className="user-list-container">
@@ -89,9 +84,9 @@ const HeartedUserListPage = () => {
         <h1>찜한 유저</h1>
       </header>
       <ul>
-        {nearbyUsers.map((user, index) => (
-          <li key={index} className="user-item">
-            <img className="user-emoji" src={getIconUrl(user.emojiPath)}></img>
+        {likedUserDetails.map((user, index) => (
+          <li key={index} className="user-item" onClick={() => navigate(`/userprofile/${user.id}`, { state: { otherUserId: user.id, userId: userId } })}>
+            <img className="user-emoji" src={getIconUrl(user.emojiPath)} alt="User Emoji" />
             <div className="user-info">
               <span className="user-gender">{user.gender}</span>
               <span className="user-name">{user.name}</span>

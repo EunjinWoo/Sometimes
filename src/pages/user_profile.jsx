@@ -14,10 +14,13 @@ import emoji5 from "../images/emojis/5.svg";
 import emoji6 from "../images/emojis/6.svg";
 import emoji7 from "../images/emojis/7.svg";
 import emoji8 from "../images/emojis/8.svg";
-import chatIcon from "../images/chatIcon.svg"; // chatIcon 불러오기
+import chatIcon from "../images/chatIcon.svg";
+import heartIcon from "../images/heartIcon.svg";
+import redHeartIcon from "../images/redHeartIcon.svg";
 
 import { createChatRoom } from '../graphql/mutations';
-import { listChatRooms } from '../graphql/queries';
+import { createLike, deleteLike } from '../graphql/mutations';
+import { listChatRooms, listLikes } from '../graphql/queries';
 
 const client = generateClient();
 
@@ -30,18 +33,19 @@ const UserProfile = () => {
   console.log('otherUserId:', otherUserId);
   console.log('userId:', userId);
   const [userDetail, setUserDetail] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
 
   // 아이콘을 매핑하는 함수
   const getIconUrl = (iconNum) => {
     const icons = {
-      1 : emoji1,
-      2 : emoji2,
-      3 : emoji3,
-      4 : emoji4,
-      5 : emoji5,
-      6 : emoji6,
-      7 : emoji7,
-      8 : emoji8,
+      1: emoji1,
+      2: emoji2,
+      3: emoji3,
+      4: emoji4,
+      5: emoji5,
+      6: emoji6,
+      7: emoji7,
+      8: emoji8,
       // 추가적인 아이콘이 있다면 여기에 추가
     };
 
@@ -55,12 +59,75 @@ const UserProfile = () => {
         variables: { id: otherUserId },
       });
       setUserDetail(userDetail);
-      
-      console.log("userdata: ",userDetail.data.getUser);
+
+      console.log("userdata: ", userDetail.data.getUser);
 
       return userDetail.data.getUser;
     } catch (error) {
       console.error('Error fetching user details:', error);
+    }
+  };
+
+  const fetchLikeStatus = async () => {
+    try {
+      const likeData = await client.graphql({
+        query: listLikes,
+        variables: {
+          filter: {
+            likeUserId: { eq: userId },
+            likedUserId: { eq: otherUserId }
+          }
+        }
+      });
+
+      if (likeData.data.listLikes.items.length > 0) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(false);
+      }
+    } catch (error) {
+      console.error('Error fetching like status:', error);
+    }
+  };
+
+  const handleHeartClick = async () => {
+    try {
+      if (isLiked) {
+        // 좋아요 삭제
+        const likeData = await client.graphql({
+          query: listLikes,
+          variables: {
+            filter: {
+              likeUserId: { eq: userId },
+              likedUserId: { eq: otherUserId }
+            }
+          }
+        });
+
+        const likeId = likeData.data.listLikes.items[0].id;
+
+        await client.graphql({
+          query: deleteLike,
+          variables: { input: { id: likeId } }
+        });
+
+        setIsLiked(false);
+      } else {
+        // 좋아요 생성
+        await client.graphql({
+          query: createLike,
+          variables: {
+            input: {
+              likeUserId: userId,
+              likedUserId: otherUserId
+            }
+          }
+        });
+
+        setIsLiked(true);
+      }
+    } catch (error) {
+      console.error('Error handling heart click:', error);
     }
   };
 
@@ -74,8 +141,8 @@ const UserProfile = () => {
         variables: {
           filter: {
             and: [
-              { or: [{ participant1Id: { eq: userId } }, { participant2Id: { eq: profileData.id  } }] },
-              { or: [{ participant1Id: { eq: profileData.id } }, { participant2Id: { eq: userId} }] },
+              { or: [{ participant1Id: { eq: userId } }, { participant2Id: { eq: profileData.id } }] },
+              { or: [{ participant1Id: { eq: profileData.id } }, { participant2Id: { eq: userId } }] },
             ],
           },
         },
@@ -116,6 +183,7 @@ const UserProfile = () => {
     const fetchProfileData = async () => {
       const data = await fetchUserDetails(otherUserId);
       setProfileData(data);
+      await fetchLikeStatus();
     };
 
     fetchProfileData();
@@ -128,11 +196,15 @@ const UserProfile = () => {
   return (
     <div className="profile-container">
       <div className="header">
-        <span className="time">09:47</span>
+        <span className="time"></span>
         <div className="icons">
-          <i className="fas fa-pen"></i>
-          <i className="fas fa-heart"></i>
           <img src={chatIcon} alt="Chat Icon" className="chat-icon" onClick={handleChatClick} />
+          <img
+            src={isLiked ? redHeartIcon : heartIcon}
+            alt="heart Icon"
+            className="chat-icon"
+            onClick={handleHeartClick}
+          />
         </div>
       </div>
       <div className="profile-content">
@@ -142,14 +214,11 @@ const UserProfile = () => {
         </div>
         <div className="greeting">{profileData.description}</div>
         <div className="profile-details">
+          <p> PROFILE PIC : </p>
+        </div>
+        <div className="profile-details">
           <div className="profile-pic">
-            <img src={`../images/default.png` || profilePic} alt="Profile" />
-          </div>
-          <div className="details">
-            <p>AGE: {profileData.age}</p>
-            <p>MBTI: {profileData.mbti}</p>
-            <p>이상형: {profileData.idealType}</p>
-            <p>나를 닮은 동물: {profileData.animal}</p>
+            <img src={require(`../images/${profileData.profilePath}`)} alt="Profile" />
           </div>
         </div>
       </div>
