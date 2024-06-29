@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 
 import { generateClient } from 'aws-amplify/api';
 import { updateLocation } from '../graphql/mutations';
-import { listUsers } from '../graphql/queries';
+import { listLocations, listUsers } from '../graphql/queries';
 import { onCreateLocation, onUpdateLocation } from '../graphql/subscriptions';
 
 
@@ -30,8 +30,6 @@ const MainPage = () => {
   console.log('userId: ', userId);
   console.log('username: ', username);
 
-
-//------------------------------------------------------------------------------------------------------
     // 내 위치 정보 업데이트 함수
     const updateUserLocation = async (userId, x, y) => {
       try {
@@ -91,6 +89,17 @@ const MainPage = () => {
         console.error('Error fetching user details:', error);
       }
     };
+
+    const fetchUserLocations = async () => {
+      try {
+        const userLocation = await client.graphql({
+          query: listLocations, 
+        });
+        return userLocation.data.listLocations.items; // 전체 유저 리스트 반환
+      } catch (error) {
+        console.error('Error fetching user locations:', error);
+      }
+    };
     
 
     const clickEvent = async () => {
@@ -111,6 +120,9 @@ const MainPage = () => {
         // 유저 정보 가져오기
         const userDetails = await fetchUserDetails(); // userId를 넘기지 않음
         console.log('User Details:', userDetails);
+        // 유저 위치 가져오기
+        const userLocations = await fetchUserLocations(); // userId를 넘기지 않음
+        console.log('User Locations:', userLocations);
         
         // 실시간 위치 업데이트 구독 
         const subscribeCreate = subscribeToLocationCreates(userId);
@@ -207,13 +219,13 @@ const MainPage = () => {
       <div className="map" ref={mapRef} style={{ height: '100%', width: '100%' }}></div>
 
       <div style={{ display: 'flex', gap: '10px' }}>
-    <button className="open-bottom-sheet" onClick={() => setOpen(true)}>
-      Open List
-    </button>
-    <button className="close-bottom-sheet" onClick={() => clickEvent()}>
-      Close List
-    </button>
-  </div>
+        <button className="open-bottom-sheet" onClick={() => setOpen(true)}>
+          Open List
+        </button>
+        <button className="close-bottom-sheet" onClick={() => clickEvent()}>
+          Close List
+        </button>
+      </div>
 
       <Sheet isOpen={open} onClose={() => setOpen(false)}>
         <Sheet.Container>
