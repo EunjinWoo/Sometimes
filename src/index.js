@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import {Amplify} from 'aws-amplify';
+import awsconfig from './aws-exports';
 import App from './App';
+
 import reportWebVitals from './reportWebVitals';
+Amplify.configure(awsconfig);
 
 // 환경변수에서 API 키 가져오기
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
