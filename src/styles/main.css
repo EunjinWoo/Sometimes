@@ -1,136 +1,152 @@
-.map {
-    width: 100%;
-    height: 100%;
-  }
+.main-container {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden; /* 스크롤 방지 */
+}
 
-  .bottom-bar {
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.retry-button-container {
+  position: absolute;
+  bottom: 70px; /* bottom-bar 바로 위로 간격 조정 */
+  left: 20px;
+  z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
+.retry-button {
+  width: 50px; /* 원하는 크기로 설정 */
+  height: 50px;
+  cursor: pointer;
+}
+
+.drag-list-up-button {
+  position: absolute;
+  bottom: 0px; /* bottom-bar 바로 위로 간격 조정 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px; /* 원하는 크기로 설정 */
+  height: 120px;
+  cursor: pointer;
+  z-index: 0; /* 다른 요소 위에 표시 */
+}
+
+.bottom-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  border-radius: 20px;
+}
+
+.bottom-bar .icon {
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom-bar .icon img {
+  width: 20px;
+  height: 20px;
+}
+
+.bottom-sheet-content {
+  padding: 10px;
+}
+
+.tab-header {
+  padding: 10px;
+  background-color: #f1f1f1;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tab-content {
+  padding: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-item:last-child {
+  border-bottom: none;
+}
+
+.emoji {
+  font-size: 30px;
+  margin-right: 10px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: bold;.retry-button-container {
     position: absolute;
+    bottom: 70px; /* bottom-bar 바로 위로 간격 조정 */
     left: 10px;
-    right: 10px;
-    bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px 0;
-    border-radius: 20px;
+    z-index: 1000; /* 다른 요소 위에 표시 */
   }
   
-  .bottom-bar .icon {
-    width: 30px;
-    height: 30px;
-    background-color: #fff;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .bottom-bar .icon img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  /* .open-bottom-sheet {
+  .drag-list-up-button {
     position: absolute;
-    bottom: 70px;
+    bottom: 70px; /* bottom-bar 바로 위로 간격 조정 */
     left: 50%;
     transform: translateX(-50%);
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
+    width: 50px; /* 원하는 크기로 설정 */
+    height: 50px;
     cursor: pointer;
-    z-index: 1000;
-  } */
+    z-index: 1000; /* 다른 요소 위에 표시 */
+  }
+  
+}
 
-  .open-bottom-sheet, .close-bottom-sheet {
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    transition: background-color 0.3s;
-  }
-  
-  .open-bottom-sheet:hover, .close-bottom-sheet:hover {
-    background-color: #0056b3;
-  }
-  
-  .bottom-sheet-content {
-    padding: 10px;
-  }
-  
-  .tab-header {
-    padding: 10px;
-    background-color: #f1f1f1;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .tab-button {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .tab-content {
-    padding: 10px;
-    max-height: 350px;
-    overflow-y: auto;
-  }
-  
-  .user-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .user-item:last-child {
-    border-bottom: none;
-  }
-  
-  .emoji {
-    font-size: 30px;
-    margin-right: 10px;
-  }
-  
-  .user-info {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .user-name {
-    font-weight: bold;
-  }
-  
-  .user-status {
-    color: #777;
-    font-size: 14px;
-  }
-  
-  .bottom-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    background-color: white;
-    padding: 10px 0;
-    border-top: 1px solid #ddd;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .icon img {
-    width: 30px;
-    height: 30px;
-  }
-  
+.user-status {
+  color: #777;
+  font-size: 14px;
+}
+
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background-color: white;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.icon img {
+  width: 30px;
+  height: 30px;
+}

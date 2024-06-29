@@ -1,17 +1,21 @@
 /* src/UserProfile.css */
 
 .profile-container {
-  width: 375px;
+  width: 100vw; /* 가로 화면 전체를 차지 */
+  height: 100vh; /* 세로 화면 전체를 차지 */
   margin: auto;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 10px;
+  box-sizing: border-box; /* 패딩과 보더를 전체 크기에 포함시킴 */
 }
+
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 15px;
 }
 
 .time {
@@ -24,8 +28,8 @@
 }
 
 .chat-icon {
-  width: 24px; /* 원하는 크기로 설정하세요 */
-  height: 24px;
+  width: 35px; /* 원하는 크기로 설정하세요 */
+  height: 35px;
   cursor: pointer;
 }
 
@@ -33,9 +37,19 @@
   text-align: center;
 }
 
+.name {
+  font-size: 23px;
+  font-weight: bold;
+  margin-top: 40px;
+}
+
 .emoji {
-  font-size: 50px;
-  margin: 20px 0;
+  margin: 20px 0 20px 0;
+}
+
+.emoji img{
+  height: 300px;
+  width: 300px;
 }
 
 .greeting {

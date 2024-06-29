@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../styles/main.css";
 import homeIcon from "../images/icon_home.svg";
 import heartIcon from "../images/icon_heart.svg";
@@ -7,7 +7,6 @@ import userIcon from "../images/icon_profile.svg";
 import cameraIcon from "../images/icon_camera.svg";
 import { useNavigate } from "react-router-dom";
 import { Sheet } from "react-modal-sheet";
-import HeartedUserListPage from "./hearted_users";
 import { useLocation } from 'react-router-dom';
 
 import charCloud from "../images/character_cloud.svg";
@@ -20,6 +19,8 @@ import emoji6 from "../images/emojis/6.svg";
 import emoji7 from "../images/emojis/7.svg";
 import emoji8 from "../images/emojis/8.svg";
 import redMarker from "../images/red_marker.png";  // Ensure you have this red marker icon in your images folder
+import retryBtn from "../images/retryBtn.svg";
+import dragListUpBtn from "../images/dragListUpIcon.svg";
 
 import { generateClient } from 'aws-amplify/api';
 import { updateLocation } from '../graphql/mutations';
@@ -272,17 +273,14 @@ const MainPage = () => {
   }, []);
 
   return (
-    <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
-      <div className="map" ref={mapRef} style={{ height: '100%', width: '100%' }}></div>
+    <div className="main-container">
+      <div className="map" ref={mapRef}></div>
 
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <button className="open-bottom-sheet" onClick={() => setOpen(true)}>
-          Open List
-        </button>
-        <button className="close-bottom-sheet" onClick={() => clickEvent()}>
-          Close List
-        </button>
+      <div className="retry-button-container">
+        <img src={retryBtn} alt="Retry Button" className="retry-button" onClick={() => clickEvent()} />
       </div>
+      <img src={dragListUpBtn} alt="Drag List Up Button" className="drag-list-up-button" onClick={() => setOpen(true)} />
+
 
       <Sheet isOpen={open} onClose={() => setOpen(false)}>
         <Sheet.Container>

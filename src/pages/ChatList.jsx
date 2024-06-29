@@ -1,6 +1,6 @@
 // ChatList.jsx
 import React, { useState, useEffect } from "react";
-import "../styles/hearted_users.css";
+import "../styles/ChatList.css";
 import { generateClient } from "aws-amplify/api";
 import { listChatRooms, getUser } from "../graphql/queries"; // 필요 시 GraphQL 쿼리 파일에서 가져오기
 import { useLocation, useNavigate } from "react-router-dom";

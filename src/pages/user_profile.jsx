@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import '../styles/user_profile.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { generateClient } from 'aws-amplify/api';
-import profilePic from '../images/boo.png';
 import { getUser } from '../graphql/queries';
 
 import charCloud from "../images/character_cloud.svg";
@@ -199,16 +198,18 @@ const UserProfile = () => {
         <span className="time"></span>
         <div className="icons">
           <img src={chatIcon} alt="Chat Icon" className="chat-icon" onClick={handleChatClick} />
-          <img
-            src={isLiked ? redHeartIcon : heartIcon}
-            alt="heart Icon"
-            className="chat-icon"
-            onClick={handleHeartClick}
-          />
+          {otherUserId !== userId && (
+            <img
+              src={isLiked ? redHeartIcon : heartIcon}
+              alt="heart Icon"
+              className="chat-icon"
+              onClick={handleHeartClick}
+            />
+          )}
         </div>
       </div>
       <div className="profile-content">
-        <div className="greeting">{profileData.name}</div>
+        <div className="name">{profileData.name}</div>
         <div className="emoji">
           <img src={getIconUrl(profileData.emojiPath)} alt="Profile" />
         </div>
