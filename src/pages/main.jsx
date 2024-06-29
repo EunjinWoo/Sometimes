@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/main.css";
-import charCloud from "../images/character_cloud.svg";
 import homeIcon from "../images/icon_home.svg";
 import heartIcon from "../images/icon_heart.svg";
 import messageIcon from "../images/icon_chat.png";
@@ -11,12 +10,12 @@ import { Sheet } from "react-modal-sheet";
 import HeartedUserListPage from "./hearted_users";
 import { useLocation } from 'react-router-dom';
 
+import charCloud from "../images/character_cloud.svg";
+
 import { generateClient } from 'aws-amplify/api';
 import { updateLocation } from '../graphql/mutations';
 import { listLocations, listUsers } from '../graphql/queries';
 import { onCreateLocation, onUpdateLocation } from '../graphql/subscriptions';
-
-
 
 const client = generateClient();
 
@@ -26,123 +25,121 @@ const MainPage = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const { userId, username } = location.state || {};
-
+  
+  const [userDetails, setUserDetails] = useState([]);
+  const [userLocations, setUserLocations] = useState([]);
+  
   console.log('userId: ', userId);
   console.log('username: ', username);
 
-    // 내 위치 정보 업데이트 함수
-    const updateUserLocation = async (userId, x, y) => {
-      try {
-        console.log("updateUserLocation -> ", userId, x, y);
-          const res = await client.graphql({
-                  query: updateLocation,
-                  variables: {
-                  input: {
-                      id: userId,
-                      x: 2,
-                      y: 3
-                  }
-                  }
-              });
-
-          return res;
-      } catch (error) {
-        console.error('Error saving location:', error);
-      }
-    };
-
-    // 실시간 위치 생성 구독 함수
-    const subscribeToLocationCreates = (userId) => {
-      const subscription = client.graphql({
-        query: onCreateLocation,
-        variables: { userId }
-      }).subscribe({
-        next: (locationData) => {
-          console.log('New location:', locationData);
+  const updateUserLocation = async (userId, x, y) => {
+    try {
+      console.log("updateUserLocation -> ", userId, x, y);
+      const res = await client.graphql({
+        query: updateLocation,
+        variables: {
+          input: {
+            id: userId,
+            x: x,
+            y: y
+          }
         }
       });
-  
-      return subscription;
-    };
-  
-    // 실시간 위치 업데이트 구독 함수
-    const subscribeToLocationUpdates = (userId) => {
-      const subscription = client.graphql({
-        query: onUpdateLocation,
-        variables: { userId }
-      }).subscribe({
-        next: (locationData) => {
-          console.log('Updated location:', locationData);
-        }
+      return res;
+    } catch (error) {
+      console.error('Error saving location:', error);
+    }
+  };
+
+  const subscribeToLocationCreates = (userId) => {
+    const subscription = client.graphql({
+      query: onCreateLocation,
+      variables: { userId }
+    }).subscribe({
+      next: (locationData) => {
+        console.log('New location:', locationData);
+      }
+    });
+
+    return subscription;
+  };
+
+  const subscribeToLocationUpdates = (userId) => {
+    const subscription = client.graphql({
+      query: onUpdateLocation,
+      variables: { userId }
+    }).subscribe({
+      next: (locationData) => {
+        console.log('Updated location:', locationData);
+      }
+    });
+
+    return subscription;
+  };
+
+  const fetchUserDetails = async () => {
+    try {
+      const userData = await client.graphql({
+        query: listUsers,
       });
-  
-      return subscription;
-    };
+      return userData.data.listUsers.items;
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
 
-    const fetchUserDetails = async () => {
-      try {
-        const userData = await client.graphql({
-          query: listUsers, // listUsers 쿼리를 사용하여 전체 유저 정보를 가져옵니다.
-        });
-        return userData.data.listUsers.items; // 전체 유저 리스트 반환
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    };
+  const fetchUserLocations = async () => {
+    try {
+      const userLocation = await client.graphql({
+        query: listLocations,
+      });
+      return userLocation.data.listLocations.items;
+    } catch (error) {
+      console.error('Error fetching user locations:', error);
+    }
+  };
 
-    const fetchUserLocations = async () => {
-      try {
-        const userLocation = await client.graphql({
-          query: listLocations, 
-        });
-        return userLocation.data.listLocations.items; // 전체 유저 리스트 반환
-      } catch (error) {
-        console.error('Error fetching user locations:', error);
-      }
-    };
-    
+  const clickEvent = async () => {
+    try {
+      /*
+      // 현재 위치로 내 위치 업데이트
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
 
-    const clickEvent = async () => {
-      try {
-        // 현재 위치로 내 위치 업데이트
-        navigator.geolocation.getCurrentPosition(async (position) => {
-          const { latitude, longitude } = position.coords;
-    
-          console.log("locRes ----> : ", userId, latitude, longitude);
-        
-          const locRes = await updateUserLocation(userId, latitude, longitude); // 현재 위치 정보를 사용합니다.
-    
-          console.log('GraphQL response - updateUserLocation:', locRes);
-        }, (error) => {
-          console.error('Error getting location:', error);
-        });
-        
-        // 유저 정보 가져오기
-        const userDetails = await fetchUserDetails(); // userId를 넘기지 않음
+        console.log("locRes ----> : ", userId, latitude, longitude);
+      
+        const locRes = await updateUserLocation(userId, latitude, longitude);
+
+        console.log('GraphQL response - updateUserLocation:', locRes);
+      }, (error) => {
+        console.error('Error getting location:', error);
+      });
+      */
+
+      const userDetails = await fetchUserDetails();
+      setUserDetails(userDetails);
+      console.log('User Details:', userDetails);
+
+      const userLocations = await fetchUserLocations();
+      setUserLocations(userLocations);
+      console.log('User Locations:', userLocations);
+
+      const subscribeCreate = subscribeToLocationCreates(userId);
+      const subscribeUpdate = subscribeToLocationUpdates(userId);
+
+      subscribeCreate.next = (locationData) => {
+        console.log('New location:', locationData);
         console.log('User Details:', userDetails);
-        // 유저 위치 가져오기
-        const userLocations = await fetchUserLocations(); // userId를 넘기지 않음
-        console.log('User Locations:', userLocations);
-        
-        // 실시간 위치 업데이트 구독 
-        const subscribeCreate = subscribeToLocationCreates(userId);
-        const subscribeUpdate = subscribeToLocationUpdates(userId);
-        
-        // 위치 업데이트 이벤트 발생 시 유저 정보도 콘솔에 출력
-        subscribeCreate.next = (locationData) => {
-          console.log('New location:', locationData);
-          console.log('User Details:', userDetails);
-        };
-        subscribeUpdate.next = (locationData) => {
-          console.log('New location:', locationData);
-          console.log('User Details:', userDetails);
-        };
-    
-      } catch (error) {
-        console.error('Error in clickEvent:', error);
-      }
-    };    
-    
+      };
+      subscribeUpdate.next = (locationData) => {
+        console.log('New location:', locationData);
+        console.log('User Details:', userDetails);
+      };
+
+    } catch (error) {
+      console.error('Error in clickEvent:', error);
+    }
+  };
 
   const initMap = useCallback((position) => {
     const { latitude, longitude } = position.coords;
@@ -180,23 +177,24 @@ const MainPage = () => {
       strokeWeight: 5,
     });
 
-    const randomLocations = Array.from({ length: 5 }, () => ({
-      lat: latitude + (Math.random() - 0.5) / 100,
-      lng: longitude + (Math.random() - 0.5) / 100,
-    }));
-
-    randomLocations.forEach((location, index) => {
-      new window.google.maps.Marker({
-        position: location,
-        map: map,
-        title: `Marker ${index + 1}`,
-        icon: {
-          url: charCloud,
-          scaledSize: new window.google.maps.Size(50, 50),
-        },
-      });
+    userLocations.forEach((location) => {
+      // console.log(location);
+      const user = userDetails.find(user => user.id === location.userId);
+      if (user) {
+        console.log("user:", location.x, location.y);
+        new window.google.maps.Marker({
+          position: { lat: location.x, lng: location.y },
+          map: map,
+          title: user.username,
+          icon: {
+            // url: user.emojipath,
+            url: charCloud,
+            scaledSize: new window.google.maps.Size(50, 50),
+          },
+        });
+      }
     });
-  }, [mapRef]);
+  }, [mapRef, userDetails, userLocations]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -232,7 +230,7 @@ const MainPage = () => {
           <Sheet.Header />
           <Sheet.Content>
             <div className="bottom-sheet-content">
-              < HeartedUserListPage/>
+              <HeartedUserListPage />
             </div>
           </Sheet.Content>
         </Sheet.Container>
