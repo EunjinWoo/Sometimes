@@ -36,9 +36,6 @@ const HeartedUserListPage = () => {
               <span className="user-name">{user.name}</span>
               <span className="user-message">{user.message}</span>
             </div>
-            {/* <span className="user-favorite">
-              {user.favorite ? '❤️' : '🤍'}
-            </span> */}
           </li>
         ))}
       </ul>

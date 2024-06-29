@@ -37,9 +37,6 @@ const MainPage = () => {
   
   const [userDetails, setUserDetails] = useState([]);
   const [userLocations, setUserLocations] = useState([]);
-  
-  console.log('userId: ', userId);
-  console.log('username: ', username);
 
   const updateUserLocation = async (userId, x, y) => {
     try {
@@ -223,8 +220,9 @@ const MainPage = () => {
           },
         });
         
+        var anyUserId = user.id;
         marker.addListener('click', () => {
-          navigate(`/userprofile/${user.id}`);
+          navigate(`/userprofile/${user.id}`, { state: { anyUserId } });
         });
       }
     });

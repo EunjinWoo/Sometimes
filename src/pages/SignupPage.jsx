@@ -21,6 +21,11 @@ const SignupPage = () => {
     const userId = uuidv4();
 
     try {
+      const getRandomEmojiPath = () => {
+        const randomNum = Math.floor(Math.random() * 8) + 1; // 1부터 8까지의 랜덤 숫자 생성
+        return `${randomNum}`;
+      };
+
       const res = await client.graphql({
         query: createUser,
         variables: {
@@ -29,7 +34,7 @@ const SignupPage = () => {
             name: signupName,
             description: description,
             gender: gender,
-            emojiPath: 'default1.png',
+            emojiPath: getRandomEmojiPath(),
             profilePath: 'default.png'
           }
         }

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/user_profile.css';
 import profilePic from '../images/boo.png';
+import { useLocation } from 'react-router-dom';
 
 const UserProfile = () => {
   const [profileData, setProfileData] = useState(null);
+  const location = useLocation();
+  const { anyUserId } = location.state || {};
+  console.log("anyUserId --> ", anyUserId);
 
   useEffect(() => {
-    // 여기에 실제 데이터 소스를 연결합니다.
-    // 예시로 static 데이터 사용
     const fetchProfileData = async () => {
       const data = {
         profilePic: profilePic, // 실제 이미지 URL로 대체
@@ -38,11 +40,6 @@ const UserProfile = () => {
       <div className="profile-content">
         <div className="emoji">😘</div>
         <div className="greeting">안녕하세요. ^^</div>
-        {/* <div className="steps">
-          <button>Step 1</button>
-          <button>Step 2</button>
-          <button>Step 3</button>
-        </div> */}
         <div className="profile-details">
           <div className="profile-pic">
             <img src={profileData.profilePic} alt="Profile" />
