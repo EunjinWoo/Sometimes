@@ -63,6 +63,7 @@ const LoginPage = () => {
         query: createLocation,
         variables: {
           input: {
+            id: userId,
             userId: userId,
             x: x,
             y: y
