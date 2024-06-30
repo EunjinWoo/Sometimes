@@ -140,8 +140,8 @@ const UserProfile = () => {
         variables: {
           filter: {
             and: [
-              { or: [{ participant1Id: { eq: userId } }, { participant2Id: { eq: profileData.id  } }] },
-              { or: [{ participant1Id: { eq: profileData.id } }, { participant2Id: { eq: userId} }] },
+              { or: [{ participant1Id: { eq: userId } }, { participant2Id: { eq: userId } }] },
+              { or: [{ participant1Id: { eq: profileData.id } }, { participant2Id: { eq: profileData.id } }] },
             ],
           },
         },
