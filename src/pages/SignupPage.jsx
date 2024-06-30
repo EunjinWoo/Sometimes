@@ -41,7 +41,7 @@ const SignupPage = () => {
       });
 
       console.log('GraphQL response (signup):', res);
-      navigate('/login', { state: { userId, signupName } });
+      navigate('/', { state: { userId, signupName } });
 
     } catch (error) {
       console.error('Error creating user:', error);

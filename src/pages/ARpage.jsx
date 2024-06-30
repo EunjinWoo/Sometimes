@@ -6,7 +6,7 @@ const ARpage = () => {
     const navigate = useNavigate();
 
     const handleBackToMainPage = () => {
-        navigate('/');
+        navigate('/main');
     };
 
     return (
